@@ -3,16 +3,36 @@
 // var shipGeo = loader.load("models/ship.3geo");
 // var shipMat = THREE.ImageUtils.loadImage("textures/texture.png");
 
+var clamp = function(mi, n, ma){
+    if (n < mi){
+        return mi;
+    }
+    else if (n > ma){
+        return ma;
+    }
+    return n;
+};
+
 var Ship = function(){
-    // this.mesh = new THREE.Mesh();
+    this.mesh = new THREE.Mesh(new THREE.CubeGeometry(1,1,1), new THREE.MeshBasicMaterial());
+    scene.add(this.mesh);
     this.curUpdate = this.gameUpdate;
 
-    this.caster = new THREE.Raycaster();
-    this.rPos = new THREE.Vector3();
-    this.lPos = new THREE.Vector3();
-    this.fPos = new THREE.Vector3();
+    this.rPos = new THREE.Vector3(0,0,0);
+    this.lPos = new THREE.Vector3(0,0,0);
+    this.fPos = new THREE.Vector3(0,0,0);
     this.frontDir = new THREE.Vector3(0,0,-1);
     this.downDir = new THREE.Vector3(0,-1,0);
+    this.caster = new THREE.Raycaster();
+
+    this.xVel = 0;
+    this.horAccel = 0.07;
+    this.maxXvel = 3;
+
+    this.yVel = 0;
+    this.maxYVel = 2;
+    this.gravity = -0.008;
+    this.onGround = 0;
 };
 
 Ship.prototype.update = function(){
@@ -20,25 +40,48 @@ Ship.prototype.update = function(){
 };
 
 Ship.prototype.setCast = function(offset, dir){
-    //  this.caster.position.copy(this.mesh.position);
-    //  this.caster.position.add(offset);
-    //  this.caster.direction.copy(dir);
+    var p = new THREE.Vector3();
+    p.copy(this.mesh.position);
+    p.add(offset);
+    this.caster.set(p, dir);
 };
 
 Ship.prototype.gameUpdate = function(){
     var pos = this.mesh.position.clone();
     // set mesh position to new position
     if (keyboard.pressed("left")){
-    
+        this.xVel = clamp(-this.maxXvel, this.xVel+this.horAccel, this.maxXvel);
     }
 
     if (keyboard.pressed("right")){
+        this.xVel = clamp(-this.maxXvel, this.xVel-this.horAccel, this.maxXvel);
+    }
+
+    this.xVel -= this.xVel*0.15;
+
+    pos.x = clamp(-20, pos.x+this.xVel, 20);
+
+    if (keyboard.pressed("space") && this.onGround){
+        this.yVel = 0.3;
+        pos.y += this.yVel;
+    }
     
-    }
+    this.yVel = clamp(-this.maxYVel, this.yVel+this.gravity, this.maxYVel);
 
-    if (keyboard.pressed("space")){
-
+    this.setCast(this.rPos, this.downDir);
+    var intersects = this.caster.intersectObject(level.objs, true);
+    if (intersects.length > 0){
+        if (intersects[0].distance < 0.5){
+            this.yVel = 0;
+            this.onGround = true;
+        } else {
+            this.onGround = false;
+            pos.y += this.yVel;
+        }
     }
+       
+    
+    this.mesh.position.copy(pos);
 
     // // move raycaster/set direction, or have seperate ones
     

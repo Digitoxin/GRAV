@@ -1,6 +1,8 @@
 "use strict"
 
 // TODO:
+//
+//
 // Ship:
 //  - implement simple ship controls. Left, right movement and jumping
 //      - raycasting for collision
@@ -14,6 +16,9 @@
 //      - Angle between two raycaster points
 //      - Physics engine
 //      - (bizzare hackery?)
+//
+// Menu and Game system
+// - Switching in and out of game cleanly, changing levels through menu
 
 // NOTES/THOUGHTS:
 // - Level should be parented to an Object3D, to allow easy rotation.
@@ -39,9 +44,13 @@ var WIDTH = window.innerWidth,
     FAR = 10000;
 
 var camera, scene, clock, controls, renderer, stats, container;
-var cube;
+var ground;
 
 var keyboard = new THREEx.KeyboardState();
+var ship;
+var level;
+
+var light;
 
 var UPDATESPERSECOND = 60;
 var FRAMETIME = 1 / UPDATESPERSECOND;
@@ -67,7 +76,7 @@ function init(){
     clock.start();
 
     camera = new THREE.PerspectiveCamera(VIEW_ANGLE, RATIO, NEAR, FAR);
-    camera.position.z = -3.0;
+    camera.position.z = -20.0;
 
     stats = new Stats();
     stats.domElement.style.position = 'absolute';
@@ -87,18 +96,23 @@ function init(){
 
     scene = new THREE.Scene();
     scene.add(camera);
+    
+    ship = new Ship();
 
-    scene.add( new THREE.AmbientLight(0xffffff) );
+    light = new THREE.PointLight(0xffffff, 1, 100);
+    scene.add(light);
 
-    cube = new THREE.Mesh(
-            new THREE.CubeGeometry(1,1,1),
-            new THREE.MeshNormalMaterial()
-            );
 
-    cube.rotation.y = 45*Math.PI/180;
-    cube.rotation.x = -45*Math.PI/180;
+    ground = new THREE.Mesh(new THREE.CubeGeometry(20,1,20), new THREE.MeshPhongMaterial({color:0xff0000}));
+    ground.position.y = -5;
 
-    scene.add(cube);
+    var g2 = new THREE.Mesh(new THREE.CubeGeometry(10,1,20), new THREE.MeshPhongMaterial({color:0x00ff00}));
+    g2.position.x = 3;
+
+    level = new Level();
+    level.objs.add(ground);
+    level.objs.add(g2);
+    scene.add(level.objs);
 
     window.addEventListener("resize", onWindowResize, false);
 }
@@ -138,8 +152,10 @@ function animate(){
 function update(){
     controls.update();
 
-    cube.rotation.y += curDelta;
-    cube.rotation.x += curDelta;
+    light.position.copy(ship.mesh.position);
+    light.position.y += 1;
+
+    ship.update();
 }
 
 function render(){

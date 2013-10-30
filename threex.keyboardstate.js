@@ -79,6 +79,7 @@ THREEx.KeyboardState.ALIAS	= {
 */
 THREEx.KeyboardState.prototype._onKeyChange	= function(event)
 {
+    event.preventDefault();
 	// log to debug
 	//console.log("onKeyChange", event, event.keyCode, event.shiftKey, event.ctrlKey, event.altKey, event.metaKey)
 
