@@ -1,13 +1,3 @@
-// TODO: 
-//      - Shift+click places marker, then you drag the mouse. Releasing mouse will fill the area between the marker and mouse position with the current block type
-//      - selection mode, adding attributes to blocks
-//      - start work on JSON serialization: 
-//          - blocktype
-//          - position
-//          - attributes (just a hash map of data)
-//      - Split into seperate files, encapsulate logic in functions
-//
-
 var sidebar, sidebarWidth = 200;
 var FOV = 45,
     WIDTH = window.innerWidth - sidebarWidth,
