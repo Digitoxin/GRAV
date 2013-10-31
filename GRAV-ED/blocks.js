@@ -87,7 +87,6 @@ var blocktypes = {
     "largeBlock":{
         "rollovergeo": "largeBlock",
         "geometry": "largeBlock",
-        "scale": new THREE.Vector3(100, 100, 100),
 
         "material": new THREE.MeshLambertMaterial({
             color: 0x93fe4c,
@@ -101,7 +100,6 @@ var blocktypes = {
     "wallBlock":{
         "rollovergeo": "wallBlockGeo",
         "geometry": "wallBlockGeo",
-        "scale": new THREE.Vector3(50, 100, 50),
 
         "material": new THREE.MeshLambertMaterial({
             color: 0x93fe4c,

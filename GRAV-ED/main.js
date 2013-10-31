@@ -115,7 +115,7 @@ function init() {
     // roll-over helpers
 
     rollOverGeo = new THREE.CubeGeometry(50, 10, 50);
-    rollOverMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, opacity: 0.2, transparent: true } );
+    rollOverMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, opacity: 0.2, transparent: true } );
 
     resetRollOverMaterial();
 
@@ -230,7 +230,7 @@ function handleFileLoad(evt){
         r.onload = function(e){
             var contents = e.target.result;
             loadJSON(contents);
-        } 
+        };
         r.readAsText(f);
     }
 }
@@ -275,6 +275,10 @@ function getRealIntersector( intersects ) {
     return null;
 }
 
+var voxSizeX = 50;
+var voxSizeY = 10;
+var voxSizeZ = 50;
+
 function setVoxelPosition( intersector ) {
     if (intersector && intersector.face){
         normalMatrix.getNormalMatrix( intersector.object.matrixWorld );
@@ -283,9 +287,9 @@ function setVoxelPosition( intersector ) {
 
         voxelPosition.addVectors( intersector.point, tmpVec );
 
-        voxelPosition.x = Math.floor( voxelPosition.x / 50 ) * 50 + geoms[curBlock.geometry].width / 2;
-        voxelPosition.y = Math.floor( voxelPosition.y / 50 ) * 50 + geoms[curBlock.geometry].height / 2;
-        voxelPosition.z = Math.floor( voxelPosition.z / 50 ) * 50 + geoms[curBlock.geometry].depth / 2;
+        voxelPosition.x = Math.floor( voxelPosition.x / voxSizeX ) * voxSizeX + voxSizeX;
+        voxelPosition.y = Math.floor( voxelPosition.y / voxSizeY ) * voxSizeY + voxSizeY;
+        voxelPosition.z = Math.floor( voxelPosition.z / voxSizeZ ) * voxSizeZ + voxSizeZ;
     }
 }
 
