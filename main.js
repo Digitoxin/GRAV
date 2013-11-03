@@ -102,7 +102,6 @@ function init(){
     light = new THREE.PointLight(0xffffff, 1, 100);
     scene.add(light);
 
-
     ground = new THREE.Mesh(new THREE.CubeGeometry(20,1,20), new THREE.MeshPhongMaterial({color:0xff0000}));
     ground.position.y = -5;
 
