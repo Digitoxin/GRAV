@@ -98,6 +98,7 @@ function init(){
     scene.add(camera);
     
     ship = new Ship();
+    ship.mesh.position.set(0,5,0);
 
     light = new THREE.PointLight(0xffffff, 1, 100);
     scene.add(light);

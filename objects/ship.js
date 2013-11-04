@@ -31,7 +31,7 @@ var Ship = function(){
 
     this.yVel = 0;
     this.maxYVel = 2;
-    this.gravity = -0.008;
+    this.gravity = -0.004;
     this.onGround = 0;
 };
 
@@ -66,8 +66,8 @@ Ship.prototype.gameUpdate = function(){
         pos.y += this.yVel;
     }
     
-    this.yVel = clamp(-this.maxYVel, this.yVel+this.gravity, this.maxYVel);
-
+    
+    /*
     this.setCast(this.rPos, this.downDir);
     var intersects = this.caster.intersectObject(level.objs, true);
     if (intersects.length > 0){
@@ -78,13 +78,33 @@ Ship.prototype.gameUpdate = function(){
             this.onGround = false;
             pos.y += this.yVel;
         }
-    }
-       
+    }*/
+
+    // raycast from current position at direction between mesh position and pos
     
+    var tDir = new THREE.Vector3();
+    tDir.sub(this.mesh.position);
+    tDir.add(pos);
+    tDir.normalize();
+
+    this.caster.set(this.mesh.position, tDir);
+
+    var intersects = this.caster.intersectObject(level.objs, true);
+    if (intersects.length > 0 && intersects[0].distance < pos.distanceTo(this.mesh.position)){    
+        console.log("colliding!");
+        console.log(intersects);
+        this.onGround = true;
+        pos.copy(intersects[0].point);
+        this.yVel = 0;
+    } else {
+        console.log("not colliding");
+        this.onGround = false;
+        this.yVel = clamp(-this.maxYVel, this.yVel+this.gravity, this.maxYVel);
+        pos.y += this.yVel;
+    }
+
     this.mesh.position.copy(pos);
 
-    // // move raycaster/set direction, or have seperate ones
-    
     //  this.setCast(this.rPos, this.downDir);
     //  var leftRes = this.caster.intersectObjects()
     //  
