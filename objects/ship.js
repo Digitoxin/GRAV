@@ -1,7 +1,7 @@
 "use strict"
 
-// var shipGeo = loader.load("models/ship.3geo");
-// var shipMat = THREE.ImageUtils.loadImage("textures/texture.png");
+var shipGeo = loader.load("models/ship.3geo");
+var shipMat = THREE.ImageUtils.loadImage("textures/texture.png");
 
 var clamp = function(mi, n, ma){
     if (n < mi){
@@ -14,7 +14,7 @@ var clamp = function(mi, n, ma){
 };
 
 var Ship = function(){
-    this.mesh = new THREE.Mesh(new THREE.CubeGeometry(1,1,1), new THREE.MeshBasicMaterial());
+    this.mesh = new THREE.Mesh(shipGeo, new THREE.MeshBasicMaterial());
     scene.add(this.mesh);
     this.curUpdate = this.gameUpdate;
 
