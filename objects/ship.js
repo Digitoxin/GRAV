@@ -1,7 +1,8 @@
 "use strict"
 
-var shipGeo = loader.load("models/ship.3geo");
-var shipMat = THREE.ImageUtils.loadImage("textures/texture.png");
+// TODO: Implement collisions
+//      - Front raycaster for collisions
+//      - Implement double ray caster angle between ship and plane
 
 var clamp = function(mi, n, ma){
     if (n < mi){
@@ -14,7 +15,10 @@ var clamp = function(mi, n, ma){
 };
 
 var Ship = function(){
-    this.mesh = new THREE.Mesh(shipGeo, new THREE.MeshBasicMaterial());
+    var shipGeo = assets["models/ship/ship.3geo"].data.geo;
+    var shipMat = new THREE.MeshBasicMaterial({map : assets["models/ship/tex.png"].data});
+
+    this.mesh = new THREE.Mesh(shipGeo, shipMat);
     scene.add(this.mesh);
     this.curUpdate = this.gameUpdate;
 
@@ -91,16 +95,16 @@ Ship.prototype.gameUpdate = function(){
 
     var intersects = this.caster.intersectObject(level.objs, true);
     if (intersects.length > 0 && intersects[0].distance < pos.distanceTo(this.mesh.position)){    
-        console.log("colliding!");
+        //console.log("colliding!");
         console.log(intersects);
         this.onGround = true;
         pos.copy(intersects[0].point);
         this.yVel = 0;
     } else {
-        console.log("not colliding");
+        //console.log("not colliding");
         this.onGround = false;
         this.yVel = clamp(-this.maxYVel, this.yVel+this.gravity, this.maxYVel);
-        pos.y += this.yVel;
+        //pos.y += this.yVel;
     }
 
     this.mesh.position.copy(pos);

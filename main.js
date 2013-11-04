@@ -7,16 +7,12 @@
 //  - implement simple ship controls. Left, right movement and jumping
 //      - raycasting for collision
 //  - Model 3D ship, flame effects and glow.
+//  - collisions
 //
 // Levels:
 //  - level class, loading level from JSON
 //  - JSON level editor (flat blocks, 1 ship length)
 //      - interchangable file between JSON editor and game that initializes the necessary materials, meshes and properties
-//  - How to rotate ship to match the surface?
-//      - Angle between two raycaster points
-//      - Physics engine
-//      - (bizzare hackery?)
-//
 // Menu and Game system
 // - Switching in and out of game cleanly, changing levels through menu
 
@@ -57,11 +53,6 @@ var FRAMETIME = 1 / UPDATESPERSECOND;
 
 // perform n seconds of updates at most
 var MAXTIME = FRAMETIME * 60;
-
-window.onload = function(){
-    init();
-    animate();
-};
 
 function init(){
     container = document.createElement( 'div' );
