@@ -22,20 +22,21 @@ var Ship = function(){
     scene.add(this.mesh);
     this.curUpdate = this.gameUpdate;
 
-    this.rPos = new THREE.Vector3(0,0,0);
-    this.lPos = new THREE.Vector3(0,0,0);
+    this.rPos = new THREE.Vector3(-1,0,0);
+    this.lPos = new THREE.Vector3(1,0,0);
     this.fPos = new THREE.Vector3(0,0,0);
     this.frontDir = new THREE.Vector3(0,0,-1);
     this.downDir = new THREE.Vector3(0,-1,0);
     this.caster = new THREE.Raycaster();
 
     this.xVel = 0;
-    this.horAccel = 0.07;
-    this.maxXvel = 3;
+    this.horAccel = 0.09;
+    this.maxXvel = 1;
+	this.friction = 0.11;
 
     this.yVel = 0;
     this.maxYVel = 2;
-    this.gravity = -0.004;
+    this.gravity = -0.008;
     this.onGround = 0;
 };
 
@@ -50,6 +51,10 @@ Ship.prototype.setCast = function(offset, dir){
     this.caster.set(p, dir);
 };
 
+Ship.prototype.intersect = function(caster){
+
+}
+
 Ship.prototype.gameUpdate = function(){
     var pos = this.mesh.position.clone();
     // set mesh position to new position
@@ -61,14 +66,11 @@ Ship.prototype.gameUpdate = function(){
         this.xVel = clamp(-this.maxXvel, this.xVel-this.horAccel, this.maxXvel);
     }
 
-    this.xVel -= this.xVel*0.15;
+    this.xVel -= this.xVel*this.friction;
 
     pos.x = clamp(-20, pos.x+this.xVel, 20);
 
-    if (keyboard.pressed("space") && this.onGround){
-        this.yVel = 0.3;
-        pos.y += this.yVel;
-    }
+    
     
     
     /*
@@ -82,32 +84,38 @@ Ship.prototype.gameUpdate = function(){
             this.onGround = false;
             pos.y += this.yVel;
         }
-    }*/
+    }
+	*/
 
     // raycast from current position at direction between mesh position and pos
     
+	this.yVel = clamp(-this.maxYVel, this.yVel+this.gravity, this.maxYVel);
+	pos.y += this.yVel;
+	
     var tDir = new THREE.Vector3();
-    tDir.sub(this.mesh.position);
-    tDir.add(pos);
+    tDir.add(this.mesh.position);
+    tDir.sub(pos);
+	tDir.y = -1;
     tDir.normalize();
-
+    
     this.caster.set(this.mesh.position, tDir);
-
-    var intersects = this.caster.intersectObject(level.objs, true);
+	
+    var intersects = this.caster.intersectObjects(level.objs.children, false);
     if (intersects.length > 0 && intersects[0].distance < pos.distanceTo(this.mesh.position)){    
-        //console.log("colliding!");
-        console.log(intersects);
-        this.onGround = true;
-        pos.copy(intersects[0].point);
-        this.yVel = 0;
+		this.onGround = true;
+		pos.y -= this.yVel;
+		this.yVel = 0;
+		
     } else {
         //console.log("not colliding");
         this.onGround = false;
-        this.yVel = clamp(-this.maxYVel, this.yVel+this.gravity, this.maxYVel);
-        //pos.y += this.yVel;
     }
-
-    this.mesh.position.copy(pos);
+	
+	if (keyboard.pressed("space") && this.onGround){
+        this.yVel = 0.3;
+        pos.y += this.yVel;
+    }
+	this.mesh.position.copy(pos);
 
     //  this.setCast(this.rPos, this.downDir);
     //  var leftRes = this.caster.intersectObjects()
