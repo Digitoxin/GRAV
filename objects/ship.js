@@ -22,8 +22,10 @@ var Ship = function(){
     scene.add(this.mesh);
     this.curUpdate = this.gameUpdate;
 
-    this.rPos = new THREE.Vector3(-1,0,0);
-    this.lPos = new THREE.Vector3(1,0,0);
+    this.tPos = new THREE.Vector3();
+
+    this.rPos = new THREE.Vector3(-2,0,0);
+    this.lPos = new THREE.Vector3(2,0,0);
     this.fPos = new THREE.Vector3(0,0,0);
     this.frontDir = new THREE.Vector3(0,0,-1);
     this.downDir = new THREE.Vector3(0,-1,0);
@@ -53,10 +55,10 @@ Ship.prototype.setCast = function(offset, dir){
 
 Ship.prototype.intersect = function(caster){
 
-}
+};
 
 Ship.prototype.gameUpdate = function(){
-    var pos = this.mesh.position.clone();
+    this.tPos = this.mesh.position.clone();
     // set mesh position to new position
     if (keyboard.pressed("left")){
         this.xVel = clamp(-this.maxXvel, this.xVel+this.horAccel, this.maxXvel);
@@ -68,82 +70,50 @@ Ship.prototype.gameUpdate = function(){
 
     this.xVel -= this.xVel*this.friction;
 
-    pos.x = clamp(-20, pos.x+this.xVel, 20);
-
+    this.tPos.x = clamp(-20, this.tPos.x+this.xVel, 20);
+	
+    this.yVel = clamp(-this.maxYVel, this.yVel+this.gravity, this.maxYVel);
+	this.tPos.y += this.yVel;
+	
+    this.downCollide();
     
-    
-    
-    /*
-    this.setCast(this.rPos, this.downDir);
-    var intersects = this.caster.intersectObject(level.objs, true);
-    if (intersects.length > 0){
-        if (intersects[0].distance < 0.5){
-            this.yVel = 0;
-            this.onGround = true;
-        } else {
-            this.onGround = false;
-            pos.y += this.yVel;
-        }
+    if (keyboard.pressed("space") && this.onGround){
+        this.yVel = 0.3;
+        this.tPos.y += this.yVel;
     }
-	*/
 
-    // raycast from current position at direction between mesh position and pos
+
+    this.mesh.position.copy(this.tPos);
+
+};
+
+Ship.prototype.frontCollide = function(){
+
+};
+
+Ship.prototype.downCollide = function(){
+    var down = new THREE.Vector3();
+	down.y = -1;
+    down.normalize();
     
-	this.yVel = clamp(-this.maxYVel, this.yVel+this.gravity, this.maxYVel);
-	pos.y += this.yVel;
-	
-    var tDir = new THREE.Vector3();
-    tDir.add(this.mesh.position);
-    tDir.sub(pos);
-	tDir.y = -1;
-    tDir.normalize();
-    
-    this.caster.set(this.mesh.position, tDir);
-	
-    var intersects = this.caster.intersectObjects(level.objs.children, false);
-    if (intersects.length > 0 && intersects[0].distance < pos.distanceTo(this.mesh.position)){    
+    this.setCast(this.lPos, down);
+    var lIntersects = this.caster.intersectObjects(level.objs.children, false);
+    this.setCast(this.rPos, down);
+    var rIntersects = this.caster.intersectObjects(level.objs.children, false);
+
+    if (rIntersects.length > 0 && rIntersects[0].distance < this.caster.ray.origin.distanceTo(this.mesh.position)){    
 		this.onGround = true;
-		pos.y -= this.yVel;
+		this.tPos.y -= this.yVel;
 		this.yVel = 0;
-		
     } else {
-        //console.log("not colliding");
         this.onGround = false;
     }
-	
-	if (keyboard.pressed("space") && this.onGround){
-        this.yVel = 0.3;
-        pos.y += this.yVel;
+
+    if (lIntersects.length > 0 && lIntersects[0].distance < this.caster.ray.origin.distanceTo(this.mesh.position)){    
+		this.onGround = true;
+		this.tPos.y -= this.yVel;
+		this.yVel = 0;
+    } else {
+        this.onGround = false;
     }
-	this.mesh.position.copy(pos);
-
-    //  this.setCast(this.rPos, this.downDir);
-    //  var leftRes = this.caster.intersectObjects()
-    //  
-    //  this.setCast(this.lPos, this.downDir);
-    //  var rightRes = this.caster.intersectObjects();
-    //
-    //  if(leftRes && rightRes){
-    //      rotation = angle(leftRes[0].position, rightRes[0].position)
-    //  }
-    //  
-    //  this.setCast(this.fPos, this.frontDir);
-    //  frontRes = frontRaycast()
-    //  if (frontRes.length > 0){
-    //      // check if it's a wall, and if so...
-    //      crash();
-    //  }
-
-
-        
-    // var pos = calculate new pos
-    //
-    // raycast with collidable objects from new pos
-    // - raycaster.intersectObjects(Array objs, bool recursive);
-    //
-    // if bottom raycaster, fix y of new pos to ground plane
-    //
-    // if front raycaster, this.crash()
-    //
-    // else this.mesh.pos = pos
 };

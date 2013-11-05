@@ -1,8 +1,6 @@
 "use strict"
 
 // TODO:
-//
-//
 // Ship:
 //  - implement simple ship controls. Left, right movement and jumping
 //      - raycasting for collision
@@ -13,9 +11,6 @@
 //  - level class, loading level from JSON
 //  - JSON level editor (flat blocks, 1 ship length)
 //      - interchangable file between JSON editor and game that initializes the necessary materials, meshes and properties
-// Menu and Game system
-// - Switching in and out of game cleanly, changing levels through menu
-
 // NOTES/THOUGHTS:
 // - Level should be parented to an Object3D, to allow easy rotation.
 // - Premature optimization:
@@ -27,10 +22,7 @@
 // - Rolling log level. (as in rotating around z-axis)
 // - Level suddenly shoots up in a 90-degree rotation. Ship caught in gravitational field while level rotates.
 // - Gravity changes. Ship suddenly falls upwards or to the side
-//      - GOTCHA: need to rotate raycaster with ship! Just parent the raycaster to the ship? Is it even an Object3D?
 // - Moving parts?
-// - Magnetized platforms to transport between different parts of a level. Flashy, twisting animation as it moves
-// - Energized launch pad at the end of the level. On hitting it, the ship charges up with particles, flies off the end of the stage and then rises into the air
 
 var WIDTH = window.innerWidth,
     HEIGHT = window.innerHeight,
