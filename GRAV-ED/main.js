@@ -102,19 +102,19 @@ function init() {
     container.appendChild( info );
 
     camera = new THREE.PerspectiveCamera( FOV, RATIO, NEAR, FAR );
-    camera.position.y = cameraPos.y;
-    camera.position.z = cameraPos.z;
+    camera.position.y = 15;
+    camera.position.z = 100;
 
     centerPos.x = cameraPos.x + 300;
     centerPos.z = cameraPos.z + 300;
 
     scene = new THREE.Scene();
 
-    camera.lookAt(scene.position);
+    //camera.lookAt(scene.position);
 
     // roll-over helpers
 
-    rollOverGeo = new THREE.CubeGeometry(50, 10, 50);
+    rollOverGeo = new THREE.CubeGeometry(voxSizeX, voxSizeY, voxSizeZ);
     rollOverMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, opacity: 0.2, transparent: true } );
 
     resetRollOverMaterial();
@@ -128,18 +128,18 @@ function init() {
 
     // grid
 
-    var size = 1000, gridWidth = 50*8, step = 50;
+    var size = voxSizeX*200, gridWidth = voxSizeX*8, step = voxSizeX;
 
     var geometry = new THREE.Geometry();
 
     for ( var i = -size/2; i <= size/2; i += step ) {
-        geometry.vertices.push( new THREE.Vector3( - gridWidth/2, 0, i ) );
-        geometry.vertices.push( new THREE.Vector3(   gridWidth/2, 0, i ) );
+        geometry.vertices.push( new THREE.Vector3( - gridWidth/2, 0, i - size/2 ) );
+        geometry.vertices.push( new THREE.Vector3(   gridWidth/2, 0, i - size/2 ) );
     }
 
     for (var j = -gridWidth/2; j <= gridWidth/2; j += step){
-        geometry.vertices.push( new THREE.Vector3( j, 0, - size/2 ) );
-        geometry.vertices.push( new THREE.Vector3( j, 0,   size/2 ) );
+        geometry.vertices.push( new THREE.Vector3( j, 0, -size ) );
+        geometry.vertices.push( new THREE.Vector3( j, 0, 0 ) );
     }
 
     var material = new THREE.LineBasicMaterial( { color: 0x000000, opacity: 0.2 } );
@@ -275,10 +275,6 @@ function getRealIntersector( intersects ) {
     return null;
 }
 
-var voxSizeX = 50;
-var voxSizeY = 10;
-var voxSizeZ = 50;
-
 function setVoxelPosition( intersector ) {
     if (intersector && intersector.face){
         normalMatrix.getNormalMatrix( intersector.object.matrixWorld );
@@ -287,9 +283,9 @@ function setVoxelPosition( intersector ) {
 
         voxelPosition.addVectors( intersector.point, tmpVec );
 
-        voxelPosition.x = Math.floor( voxelPosition.x / voxSizeX ) * voxSizeX + voxSizeX;
-        voxelPosition.y = Math.floor( voxelPosition.y / voxSizeY ) * voxSizeY + voxSizeY;
-        voxelPosition.z = Math.floor( voxelPosition.z / voxSizeZ ) * voxSizeZ + voxSizeZ;
+        voxelPosition.x = Math.floor( voxelPosition.x / voxSizeX ) * voxSizeX + voxSizeX/2;
+        voxelPosition.y = Math.floor( voxelPosition.y / voxSizeY ) * voxSizeY + voxSizeY/2;
+        voxelPosition.z = Math.floor( voxelPosition.z / voxSizeZ ) * voxSizeZ + voxSizeZ/2;
     }
 }
 
@@ -412,7 +408,7 @@ function setYLevel(n){
     yLevel = n;
 
     for (var i = 0; i < cubes.length; ++i){
-            cubes[i].position.y += difLevels * 50;
+            cubes[i].position.y += difLevels * voxSizeY;
             cubes[i].updateMatrix();
     }
 }
@@ -458,7 +454,7 @@ function onDocumentKeyUp( event ) {
 }
 
 function updateControls(){
-    if (leftKeyDown){
+    /*if (leftKeyDown){
         camAngle += 0.05;
         //cameraPos.x += cameraSpeed;
         //plane.position.x += cameraSpeed;
@@ -467,25 +463,29 @@ function updateControls(){
         camAngle -= 0.05;
         //cameraPos.x -= cameraSpeed;
         //plane.position.x -= cameraSpeed;
-    }
+    }*/
     if (downKeyDown){
-        cameraPos.z += cameraSpeed * Math.cos(camAngle);
+        /*cameraPos.z += cameraSpeed * Math.cos(camAngle);
         plane.position.z += cameraSpeed * Math.cos(camAngle);
         centerPos.z += cameraSpeed * Math.cos(camAngle);
 
         cameraPos.x += cameraSpeed * Math.sin(camAngle);
         plane.position.x += cameraSpeed * Math.sin(camAngle);
-        centerPos.x += cameraSpeed * Math.sin(camAngle);
+        centerPos.x += cameraSpeed * Math.sin(camAngle);*/
+
+        camera.position.z += 5;
 
     }
     if (upKeyDown){
-        cameraPos.z -= cameraSpeed * Math.cos(camAngle);
+        /*cameraPos.z -= cameraSpeed * Math.cos(camAngle);
         plane.position.z -= cameraSpeed * Math.cos(camAngle);
         centerPos.z -= cameraSpeed * Math.cos(camAngle);
         
         cameraPos.x -= cameraSpeed * Math.sin(camAngle);
         plane.position.x -= cameraSpeed * Math.sin(camAngle);
-        centerPos.x -= cameraSpeed * Math.sin(camAngle);
+        centerPos.x -= cameraSpeed * Math.sin(camAngle);*/
+
+        camera.position.z -= 5;
     }
 }
 
@@ -512,11 +512,11 @@ function render() {
         }
     }
 
-    camera.position.x = 1000 * Math.sin(camAngle) + cameraPos.x;
-    camera.position.y = cameraPos.y * cameraOffset;
-    camera.position.z = 1000 * Math.cos(camAngle) + cameraPos.z;
+    //camera.position.x = 1000 * Math.sin(camAngle) + cameraPos.x;
+    //camera.position.y = cameraPos.y * cameraOffset;
+    //camera.position.z = 1000 * Math.cos(camAngle) + cameraPos.z;
 
-    camera.lookAt(centerPos);
+    //camera.lookAt(centerPos);
 
     updateCurPosElem();
     updateCurBlockAmountElem();

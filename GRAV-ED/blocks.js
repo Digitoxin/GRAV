@@ -1,5 +1,9 @@
+var voxSizeX = 10;
+var voxSizeY = 1;
+var voxSizeZ = 10;
+
 var geoms = {
-    blockGeo: new THREE.CubeGeometry( 50, 10, 50 ),
+    blockGeo: new THREE.CubeGeometry( voxSizeX, voxSizeY, voxSizeZ ),
     largeBlock: new THREE.CubeGeometry( 100, 20, 100 ),
     wallBlockGeo: new THREE.CubeGeometry( 50, 200, 50 ),
 };
