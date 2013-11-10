@@ -11,18 +11,11 @@
 //  - level class, loading level from JSON
 //  - JSON level editor (flat blocks, 1 ship length)
 //      - interchangable file between JSON editor and game that initializes the necessary materials, meshes and properties
-// NOTES/THOUGHTS:
-// - Level should be parented to an Object3D, to allow easy rotation.
-// - Premature optimization:
-//      - Should level geometry be merged? Would this optimize things, or would raycaster shit itself on massive merged geometry?
-//      - Can merged geometry be culled?
 
 // IDEAS:
-// - Speed controls are automated. NO BRAKES ON THIS BABY
-// - Rolling log level. (as in rotating around z-axis)
-// - Level suddenly shoots up in a 90-degree rotation. Ship caught in gravitational field while level rotates.
+// - horizontal, and vertical rotations
+// - rolling log?
 // - Gravity changes. Ship suddenly falls upwards or to the side
-// - Moving parts?
 
 var WIDTH = window.innerWidth,
     HEIGHT = window.innerHeight,
@@ -84,7 +77,7 @@ function init(){
     ship = new Ship();
     ship.mesh.position.set(0,5,0);
 	
-	scene.add(new THREE.AmbientLight(0x111111));
+	scene.add(new THREE.AmbientLight(0x120000));
     light = new THREE.PointLight(0xffffff, 1, 200);
     scene.add(light);
 

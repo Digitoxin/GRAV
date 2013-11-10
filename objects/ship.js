@@ -96,20 +96,23 @@ Ship.prototype.downCollide = function(){
 	down.y = -1;
     down.normalize();
     
-    this.setCast(this.lPos, down);
-    var lIntersects = this.caster.intersectObjects(level.objs.children, false);
     this.setCast(this.rPos, down);
     var rIntersects = this.caster.intersectObjects(level.objs.children, false);
 
-    if (rIntersects.length > 0 && rIntersects[0].distance < this.caster.ray.origin.distanceTo(this.mesh.position)){    
+    if (rIntersects.length > 0 && rIntersects[0].distance < 0.5){    
 		this.onGround = true;
 		this.tPos.y -= this.yVel;
 		this.yVel = 0;
     } else {
         this.onGround = false;
     }
+    
+    
 
-    if (lIntersects.length > 0 && lIntersects[0].distance < this.caster.ray.origin.distanceTo(this.mesh.position)){    
+    this.setCast(this.lPos, down);
+    var lIntersects = this.caster.intersectObjects(level.objs.children, false);
+
+    if (lIntersects.length > 0 && lIntersects[0].distance < 0.5){    
 		this.onGround = true;
 		this.tPos.y -= this.yVel;
 		this.yVel = 0;
