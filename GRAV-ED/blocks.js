@@ -11,7 +11,7 @@ var geoms = {
 var blockTex = THREE.ImageUtils.loadTexture("textures/square-outline-textured.png");
 
 var blocktypes = {
-    "blueBlock":{
+    blueBlock:{
         "rollovergeo": "blockGeo",
         "geometry": "blockGeo",
 
@@ -24,8 +24,8 @@ var blocktypes = {
 
     },
 
-    "redBlock":{
-        "rollovergeo": "blockGeo",
+    redBlock:{
+        "rollovergeo":"blockGeo",
         "geometry": "blockGeo",
 
         "material": new THREE.MeshLambertMaterial({
@@ -37,7 +37,7 @@ var blocktypes = {
 
     },
     
-    "greenBlock":{
+    greenBlock:{
         "rollovergeo": "blockGeo",
         "geometry": "blockGeo",
 
@@ -50,7 +50,7 @@ var blocktypes = {
 
     },
     
-    "largeBlock":{
+    largeBlock:{
         "rollovergeo": "largeBlock",
         "geometry": "largeBlock",
 
@@ -63,7 +63,7 @@ var blocktypes = {
 
     },
 
-    "wallBlock":{
+    wallBlock:{
         "rollovergeo": "wallBlockGeo",
         "geometry": "wallBlockGeo",
 

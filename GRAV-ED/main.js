@@ -284,7 +284,7 @@ function setVoxelPosition( intersector ) {
         voxelPosition.addVectors( intersector.point, tmpVec );
 
         voxelPosition.x = Math.floor( voxelPosition.x / voxSizeX ) * voxSizeX + voxSizeX/2;
-        voxelPosition.y = Math.floor( voxelPosition.y / voxSizeY ) * voxSizeY + voxSizeY/2;
+        voxelPosition.y = Math.floor( voxelPosition.y / voxSizeY ) * voxSizeY + voxSizeY/4;
         voxelPosition.z = Math.floor( voxelPosition.z / voxSizeZ ) * voxSizeZ + voxSizeZ/2;
     }
 }
@@ -408,7 +408,7 @@ function setYLevel(n){
     yLevel = n;
 
     for (var i = 0; i < cubes.length; ++i){
-            cubes[i].position.y += difLevels * voxSizeY;
+            cubes[i].position.y += difLevels * voxSizeY*2;
             cubes[i].updateMatrix();
     }
 }
