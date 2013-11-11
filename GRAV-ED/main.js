@@ -408,7 +408,7 @@ function setYLevel(n){
     yLevel = n;
 
     for (var i = 0; i < cubes.length; ++i){
-            cubes[i].position.y += difLevels * voxSizeY*2;
+            cubes[i].position.y += difLevels * voxSizeY;
             cubes[i].updateMatrix();
     }
 }

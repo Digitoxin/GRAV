@@ -19,6 +19,7 @@ var Ship = function(){
     var shipMat = new THREE.MeshBasicMaterial({map : assets["models/ship/tex.png"].data});
 
     this.mesh = new THREE.Mesh(shipGeo, shipMat);
+    this.mesh.rotation.y = Math.PI;
     scene.add(this.mesh);
     this.curUpdate = this.gameUpdate;
 
@@ -60,11 +61,11 @@ Ship.prototype.intersect = function(caster){
 Ship.prototype.gameUpdate = function(){
     this.tPos = this.mesh.position.clone();
     // set mesh position to new position
-    if (keyboard.pressed("left")){
+    if (keyboard.pressed("right")){
         this.xVel = clamp(-this.maxXvel, this.xVel+this.horAccel, this.maxXvel);
     }
 
-    if (keyboard.pressed("right")){
+    if (keyboard.pressed("left")){
         this.xVel = clamp(-this.maxXvel, this.xVel-this.horAccel, this.maxXvel);
     }
 

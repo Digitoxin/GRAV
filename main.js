@@ -52,7 +52,7 @@ function init(){
     clock.start();
 
     camera = new THREE.PerspectiveCamera(VIEW_ANGLE, RATIO, NEAR, FAR);
-    camera.position.z = -20.0;
+    camera.position.z = 20;
 	camera.position.y = 10;
 
     stats = new Stats();
@@ -77,7 +77,7 @@ function init(){
     ship = new Ship();
     ship.mesh.position.set(0,5,0);
 	
-	scene.add(new THREE.AmbientLight(0x120000));
+	scene.add(new THREE.AmbientLight(0xffffff));
     light = new THREE.PointLight(0xffffff, 1, 200);
     scene.add(light);
 
@@ -88,8 +88,7 @@ function init(){
     g2.position.x = 3;
 
     level = new Level();
-    level.objs.add(ground);
-    level.objs.add(g2);
+    level.load("levels/testlevel.js");
     scene.add(level.objs);
 
     window.addEventListener("resize", onWindowResize, false);
@@ -128,10 +127,12 @@ function animate(){
 }
 
 function update(){
-    controls.update();
+    //controls.update();
 
     light.position.copy(ship.mesh.position);
     light.position.y += 1;
+    
+    level.update();
 
     ship.update();
 }

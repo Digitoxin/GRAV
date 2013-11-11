@@ -15,7 +15,7 @@ var blocktypes = {
         "rollovergeo": "blockGeo",
         "geometry": "blockGeo",
 
-        "material": new THREE.MeshLambertMaterial({
+        "material": new THREE.MeshPhongMaterial({
             color: 0x4ca8fe,
             ambient: 0x4ca8fe,
             shading: THREE.FlatShading,
@@ -28,7 +28,7 @@ var blocktypes = {
         "rollovergeo":"blockGeo",
         "geometry": "blockGeo",
 
-        "material": new THREE.MeshLambertMaterial({
+        "material": new THREE.MeshPhongMaterial({
             color: 0xfe4c65,
             ambient: 0xfe4c65,
             shading: THREE.FlatShading,
@@ -41,7 +41,7 @@ var blocktypes = {
         "rollovergeo": "blockGeo",
         "geometry": "blockGeo",
 
-        "material": new THREE.MeshLambertMaterial({
+        "material": new THREE.MeshPhongMaterial({
             color: 0x93fe4c,
             ambient: 0x93fe4c,
             shading: THREE.FlatShading,
@@ -54,7 +54,7 @@ var blocktypes = {
         "rollovergeo": "largeBlock",
         "geometry": "largeBlock",
 
-        "material": new THREE.MeshLambertMaterial({
+        "material": new THREE.MeshPhongMaterial({
             color: 0x93fe4c,
             ambient: 0x93fe4c,
             shading: THREE.FlatShading,
@@ -67,7 +67,7 @@ var blocktypes = {
         "rollovergeo": "wallBlockGeo",
         "geometry": "wallBlockGeo",
 
-        "material": new THREE.MeshLambertMaterial({
+        "material": new THREE.MeshPhongMaterial({
             color: 0x93fe4c,
             ambient: 0x93fe4c,
             shading: THREE.FlatShading,
