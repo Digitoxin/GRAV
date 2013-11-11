@@ -1,3 +1,8 @@
+"use strict"
+
+// TODO:
+// - better cusomizable blocks, textures?
+
 var sidebar, sidebarWidth = 200;
 var FOV = 45,
     WIDTH = window.innerWidth - sidebarWidth,

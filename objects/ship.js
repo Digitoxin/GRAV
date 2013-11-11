@@ -36,6 +36,10 @@ var Ship = function(){
     this.horAccel = 0.09;
     this.maxXvel = 1;
 	this.friction = 0.11;
+    
+    
+    this.VTHRUSTMAX = 30;
+    this.vThrust = this.VTHRUSTMAX;
 
     this.yVel = 0;
     this.maxYVel = 2;
@@ -79,12 +83,20 @@ Ship.prototype.gameUpdate = function(){
     this.downCollide();
     
     if (keyboard.pressed("space") && this.onGround){
-        this.yVel = 0.3;
+        this.yVel = 0.2;
         this.tPos.y += this.yVel;
+    }
+    
+    if (this.vThrust > 0 && keyboard.pressed("space")){
+        this.yVel += 0.01;
+        this.vThrust -= 1;
     }
 
 
     this.mesh.position.copy(this.tPos);
+    
+    this.mesh.rotation.x = this.yVel;
+    this.mesh.rotation.z = this.xVel*0.3;
 
 };
 
@@ -103,6 +115,7 @@ Ship.prototype.downCollide = function(){
     if (rIntersects.length > 0 && rIntersects[0].distance < 0.5){    
 		this.onGround = true;
 		this.tPos.y -= this.yVel;
+        this.vThrust = this.VTHRUSTMAX;
 		this.yVel = 0;
     } else {
         this.onGround = false;

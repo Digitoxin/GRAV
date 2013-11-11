@@ -1,5 +1,9 @@
 "use strict"
 
+// TODO: figure out level format?
+// - level segments
+// - special objects
+
 var Level = function(){
     this.objs = new THREE.Object3D();
     this.loaded = false;

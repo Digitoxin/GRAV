@@ -52,7 +52,7 @@ function init(){
     clock.start();
 
     camera = new THREE.PerspectiveCamera(VIEW_ANGLE, RATIO, NEAR, FAR);
-    camera.position.z = 20;
+    camera.position.z = 25;
 	camera.position.y = 10;
 
     stats = new Stats();
@@ -78,7 +78,7 @@ function init(){
     ship.mesh.position.set(0,5,0);
 	
 	scene.add(new THREE.AmbientLight(0xffffff));
-    light = new THREE.PointLight(0xffffff, 1, 200);
+    light = new THREE.PointLight(0xffffff, 1.5, 200);
     scene.add(light);
 
     ground = new THREE.Mesh(new THREE.CubeGeometry(20,1,20), new THREE.MeshPhongMaterial({color:0xff0000}));
