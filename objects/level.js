@@ -7,7 +7,6 @@
 var Level = function(){
     this.objs = new THREE.Object3D();
     this.loaded = false;
-
 };
 
 Level.prototype.load = function(lurl){
@@ -21,11 +20,11 @@ Level.prototype.load = function(lurl){
     for (var i = 0; i < ldata.length; ++i){
         var type = blocktypes[ldata[i].blockName];
         var cube = new THREE.Mesh( geoms[type.geo], type.mat );
-        cube.position.x = ldata[i].position.x;
-        cube.position.y = ldata[i].position.y;
-        cube.position.z = ldata[i].position.z;
+        cube.position.x = ldata[i].pos.x;
+        cube.position.y = ldata[i].pos.y;
+        cube.position.z = ldata[i].pos.z;
 
-        cube.blockName = ldata[i].blockName;
+        cube.blockName = ldata[i].b;
 
         cube.matrixAutoUpdate = false;
         cube.updateMatrix();

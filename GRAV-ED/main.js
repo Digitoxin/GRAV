@@ -214,12 +214,12 @@ function cubes2JSON(){
     var jsobj = [];
     for (var i = 0; i < cubes.length; ++i){
         var cube = {};
-        cube.blockName = cubes[i].blockName;
+        cube.b = cubes[i].blockName;
 
-        cube.position = {};
-        cube.position.x = cubes[i].position.x;
-        cube.position.y = cubes[i].position.y;
-        cube.position.z = cubes[i].position.z;
+        cube.pos = {};
+        cube.pos.x = cubes[i].position.x;
+        cube.pos.y = cubes[i].position.y;
+        cube.pos.z = cubes[i].position.z;
 
         jsobj.push(cube);
     }
@@ -250,13 +250,13 @@ function loadJSON(f){
     var clist = JSON.parse(f);
 
     for (var i = 0; i < clist.length; ++i){
-        var type = blocktypes[clist[i].blockName];
+        var type = blocktypes[clist[i].b];
         var cube = new THREE.Mesh( geoms[type.geo], type.mat );
-        cube.position.x = clist[i].position.x;
-        cube.position.y = clist[i].position.y;
-        cube.position.z = clist[i].position.z;
+        cube.position.x = clist[i].pos.x;
+        cube.position.y = clist[i].pos.y;
+        cube.position.z = clist[i].pos.z;
 
-        cube.blockName = clist[i].blockName;
+        cube.blockName = clist[i].b;
 
         cube.matrixAutoUpdate = false;
         cube.updateMatrix();
