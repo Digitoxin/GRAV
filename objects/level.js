@@ -11,7 +11,6 @@ var Level = function(){
 };
 
 Level.prototype.load = function(lurl){
-    
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "GET", lurl, false );
     xmlHttp.send( null );
@@ -21,7 +20,7 @@ Level.prototype.load = function(lurl){
     
     for (var i = 0; i < ldata.length; ++i){
         var type = blocktypes[ldata[i].blockName];
-        var cube = new THREE.Mesh( geoms[type.geometry], type.material );
+        var cube = new THREE.Mesh( geoms[type.geo], type.mat );
         cube.position.x = ldata[i].position.x;
         cube.position.y = ldata[i].position.y;
         cube.position.z = ldata[i].position.z;

@@ -85,6 +85,7 @@ Ship.prototype.gameUpdate = function(){
     if (keyboard.pressed("space") && this.onGround){
         this.yVel = 0.2;
         this.tPos.y += this.yVel;
+        this.vThrust = this.VTHRUSTMAX;
     }
     
     if (this.vThrust > 0 && keyboard.pressed("space")){
@@ -112,7 +113,7 @@ Ship.prototype.downCollide = function(){
     this.setCast(this.rPos, down);
     var rIntersects = this.caster.intersectObjects(level.objs.children, false);
 
-    if (rIntersects.length > 0 && rIntersects[0].distance < 0.5){    
+    if (rIntersects.length > 0 && rIntersects[0].distance < this.tPos.distanceTo(this.mesh.position)){    
 		this.onGround = true;
 		this.tPos.y -= this.yVel;
         this.vThrust = this.VTHRUSTMAX;

@@ -13,7 +13,7 @@ var FOV = 45,
 
 var yLevel = 0;
 
-var cameraSpeed = 25;
+var camScrollSpeed = 10;
 
 var container, stats;
 var camera, scene, renderer;
@@ -65,8 +65,9 @@ function setCurrentBlockByIndex(n){
     setCurrentBlockByName(blockKeys[curBlockIndex]);
 }
 
-function resetRollOverMaterial(){
-    rollOverMaterial = curBlock.material.clone();
+function resetRollOver(){
+    rollOverGeo = geoms[curBlock.geo].clone();
+    rollOverMaterial = curBlock.mat.clone();
     rollOverMaterial.opacity = 0.4;
     rollOverMaterial.transparent = true;
 }
@@ -81,9 +82,9 @@ function setCurrentBlockByName(blockname){
 
         rollOverMesh = null;
 
-        resetRollOverMaterial();
+        resetRollOver();
         
-        rollOverMesh = new THREE.Mesh( geoms[curBlock.geometry], rollOverMaterial );
+        rollOverMesh = new THREE.Mesh( rollOverGeo, rollOverMaterial );
         
         scene.add(rollOverMesh);
 
@@ -122,7 +123,7 @@ function init() {
     rollOverGeo = new THREE.CubeGeometry(voxSizeX, voxSizeY, voxSizeZ);
     rollOverMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, opacity: 0.2, transparent: true } );
 
-    resetRollOverMaterial();
+    resetRollOver();
 
     rollOverMesh = new THREE.Mesh( rollOverGeo, rollOverMaterial );
     scene.add( rollOverMesh );
@@ -210,7 +211,7 @@ function onWindowResize() {
 
 function cubes2JSON(){
     //TODO: remember to reset position offsets and ylevel!
-    jsobj = [];
+    var jsobj = [];
     for (var i = 0; i < cubes.length; ++i){
         var cube = {};
         cube.blockName = cubes[i].blockName;
@@ -229,7 +230,7 @@ function cubes2JSON(){
 }
 
 function handleFileLoad(evt){
-    f = evt.target.files[0];
+    var f = evt.target.files[0];
     if (f){
         var r = new FileReader();
         r.onload = function(e){
@@ -250,7 +251,7 @@ function loadJSON(f){
 
     for (var i = 0; i < clist.length; ++i){
         var type = blocktypes[clist[i].blockName];
-        var cube = new THREE.Mesh( geoms[type.geometry], type.material );
+        var cube = new THREE.Mesh( geoms[type.geo], type.mat );
         cube.position.x = clist[i].position.x;
         cube.position.y = clist[i].position.y;
         cube.position.z = clist[i].position.z;
@@ -391,7 +392,7 @@ function onPlaceBlock(intersects){
     intersector = getRealIntersector( intersects );
     setVoxelPosition( intersector );
 
-    var cube = new THREE.Mesh( geoms[curBlock.geometry], curBlock.material );
+    var cube = new THREE.Mesh( geoms[curBlock.geo], curBlock.mat );
     cube.position.copy( voxelPosition );
 
     cube.blockName = blockKeys[curBlockIndex];
@@ -459,38 +460,17 @@ function onDocumentKeyUp( event ) {
 }
 
 function updateControls(){
-    /*if (leftKeyDown){
-        camAngle += 0.05;
-        //cameraPos.x += cameraSpeed;
-        //plane.position.x += cameraSpeed;
+    var mult = 1;
+    if (isShiftDown){
+        mult = 4;
     }
-    if (rightKeyDown){
-        camAngle -= 0.05;
-        //cameraPos.x -= cameraSpeed;
-        //plane.position.x -= cameraSpeed;
-    }*/
+
     if (downKeyDown){
-        /*cameraPos.z += cameraSpeed * Math.cos(camAngle);
-        plane.position.z += cameraSpeed * Math.cos(camAngle);
-        centerPos.z += cameraSpeed * Math.cos(camAngle);
-
-        cameraPos.x += cameraSpeed * Math.sin(camAngle);
-        plane.position.x += cameraSpeed * Math.sin(camAngle);
-        centerPos.x += cameraSpeed * Math.sin(camAngle);*/
-
-        camera.position.z += 5;
+        camera.position.z += camScrollSpeed*mult;
 
     }
     if (upKeyDown){
-        /*cameraPos.z -= cameraSpeed * Math.cos(camAngle);
-        plane.position.z -= cameraSpeed * Math.cos(camAngle);
-        centerPos.z -= cameraSpeed * Math.cos(camAngle);
-        
-        cameraPos.x -= cameraSpeed * Math.sin(camAngle);
-        plane.position.x -= cameraSpeed * Math.sin(camAngle);
-        centerPos.x -= cameraSpeed * Math.sin(camAngle);*/
-
-        camera.position.z -= 5;
+        camera.position.z -= camScrollSpeed*mult;
     }
 }
 

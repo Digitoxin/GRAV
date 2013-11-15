@@ -4,18 +4,17 @@ var voxSizeZ = 10;
 
 var geoms = {
     blockGeo: new THREE.CubeGeometry( voxSizeX, voxSizeY, voxSizeZ*5 ),
-    largeBlock: new THREE.CubeGeometry( 100, 20, 100 ),
-    wallBlockGeo: new THREE.CubeGeometry( 50, 200, 50 ),
+    largeBlock: new THREE.CubeGeometry( voxSizeX, voxSizeY*4, voxSizeZ*5 ),
+    wallBlockGeo: new THREE.CubeGeometry( voxSizeX, voxSizeY*10, voxSizeZ ),
 };
 
 var blockTex = THREE.ImageUtils.loadTexture("textures/square-outline-textured.png");
 
 var blocktypes = {
     blueBlock:{
-        "rollovergeo": "blockGeo",
-        "geometry": "blockGeo",
+        "geo": "blockGeo",
 
-        "material": new THREE.MeshPhongMaterial({
+        "mat": new THREE.MeshPhongMaterial({
             color: 0x4ca8fe,
             ambient: 0x4ca8fe,
             shading: THREE.FlatShading,
@@ -25,10 +24,9 @@ var blocktypes = {
     },
 
     redBlock:{
-        "rollovergeo":"blockGeo",
-        "geometry": "blockGeo",
+        "geo": "blockGeo",
 
-        "material": new THREE.MeshPhongMaterial({
+        "mat": new THREE.MeshPhongMaterial({
             color: 0xfe4c65,
             ambient: 0xfe4c65,
             shading: THREE.FlatShading,
@@ -38,10 +36,9 @@ var blocktypes = {
     },
     
     greenBlock:{
-        "rollovergeo": "blockGeo",
-        "geometry": "blockGeo",
+        "geo": "blockGeo",
 
-        "material": new THREE.MeshPhongMaterial({
+        "mat": new THREE.MeshPhongMaterial({
             color: 0x93fe4c,
             ambient: 0x93fe4c,
             shading: THREE.FlatShading,
@@ -51,10 +48,9 @@ var blocktypes = {
     },
     
     largeBlock:{
-        "rollovergeo": "largeBlock",
-        "geometry": "largeBlock",
+        "geo": "largeBlock",
 
-        "material": new THREE.MeshPhongMaterial({
+        "mat": new THREE.MeshPhongMaterial({
             color: 0x93fe4c,
             ambient: 0x93fe4c,
             shading: THREE.FlatShading,
@@ -64,10 +60,9 @@ var blocktypes = {
     },
 
     wallBlock:{
-        "rollovergeo": "wallBlockGeo",
-        "geometry": "wallBlockGeo",
+        "geo": "wallBlockGeo",
 
-        "material": new THREE.MeshPhongMaterial({
+        "mat": new THREE.MeshPhongMaterial({
             color: 0x93fe4c,
             ambient: 0x93fe4c,
             shading: THREE.FlatShading,

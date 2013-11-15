@@ -88,7 +88,7 @@ function init(){
     g2.position.x = 3;
 
     level = new Level();
-    level.load("levels/testlevel.js");
+    level.load("levels/lev1.json");
     scene.add(level.objs);
 
     window.addEventListener("resize", onWindowResize, false);
@@ -120,7 +120,7 @@ function animate(){
         update();
         counter -= FRAMETIME;
     }
-
+    
     render();
     
     stats.update();
@@ -131,6 +131,10 @@ function update(){
 
     light.position.copy(ship.mesh.position);
     light.position.y += 1;
+    
+    camera.position.y += ((ship.mesh.position.y + 5) - camera.position.y)*0.03;
+    //camera.lookAt(ship.mesh.position);
+    //camera.rotation.y *= 0.3;
     
     level.update();
 
