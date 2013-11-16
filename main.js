@@ -31,8 +31,6 @@ var keyboard = new THREEx.KeyboardState();
 var ship;
 var level;
 
-var light;
-
 var UPDATESPERSECOND = 60;
 var FRAMETIME = 1 / UPDATESPERSECOND;
 
@@ -78,8 +76,6 @@ function init(){
     ship.mesh.position.set(0,5,0);
 	
 	scene.add(new THREE.AmbientLight(0xffffff));
-    light = new THREE.PointLight(0xffffff, 1.5, 200);
-    scene.add(light);
 
     ground = new THREE.Mesh(new THREE.CubeGeometry(20,1,20), new THREE.MeshPhongMaterial({color:0xff0000}));
     ground.position.y = -5;
@@ -129,12 +125,11 @@ function animate(){
 function update(){
     //controls.update();
 
-    light.position.copy(ship.mesh.position);
-    light.position.y += 1;
-    
     camera.position.y += ((ship.mesh.position.y + 5) - camera.position.y)*0.03;
-    //camera.lookAt(ship.mesh.position);
-    //camera.rotation.y *= 0.3;
+    camera.lookAt(ship.mesh.position);
+    camera.rotation.x *= 0.3;
+    camera.rotation.y *= 0.5;
+    camera.rotation.z *= 0.7;
     
     level.update();
 

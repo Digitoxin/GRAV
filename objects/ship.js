@@ -16,11 +16,14 @@ var clamp = function(mi, n, ma){
 
 var Ship = function(){
     var shipGeo = assets["models/ship/ship.3geo"].data.geo;
-    var shipMat = new THREE.MeshBasicMaterial({map : assets["models/ship/tex.png"].data});
+    var shipMat = new THREE.MeshLambertMaterial({map : assets["models/ship/tex.png"].data});
 
     this.mesh = new THREE.Mesh(shipGeo, shipMat);
     this.mesh.rotation.y = Math.PI;
     scene.add(this.mesh);
+
+    this.light = new THREE.PointLight(0xffffff, 1.5, 300);
+    scene.add(this.light);
     this.curUpdate = this.gameUpdate;
 
     this.tPos = new THREE.Vector3();
@@ -37,14 +40,14 @@ var Ship = function(){
     this.maxXvel = 1;
 	this.friction = 0.11;
     
-    
-    this.VTHRUSTMAX = 30;
+    this.VTHRUSTMAX = 45;
     this.vThrust = this.VTHRUSTMAX;
 
     this.yVel = 0;
     this.maxYVel = 2;
     this.gravity = -0.008;
     this.onGround = 0;
+
 };
 
 Ship.prototype.update = function(){
@@ -75,7 +78,7 @@ Ship.prototype.gameUpdate = function(){
 
     this.xVel -= this.xVel*this.friction;
 
-    this.tPos.x = clamp(-20, this.tPos.x+this.xVel, 20);
+    this.tPos.x = clamp(-35, this.tPos.x+this.xVel, 35);
 	
     this.yVel = clamp(-this.maxYVel, this.yVel+this.gravity, this.maxYVel);
 	this.tPos.y += this.yVel;
@@ -97,7 +100,14 @@ Ship.prototype.gameUpdate = function(){
     this.mesh.position.copy(this.tPos);
     
     this.mesh.rotation.x = this.yVel;
-    this.mesh.rotation.z = this.xVel*0.3;
+    this.mesh.rotation.z = this.xVel*0.4;
+
+    this.light.position.copy(this.mesh.position);
+    this.light.position.y += 2;
+
+    if (ship.mesh.position.y < -20){
+        this.onShipFall();
+    }
 
 };
 
@@ -118,20 +128,27 @@ Ship.prototype.downCollide = function(){
 		this.tPos.y -= this.yVel;
         this.vThrust = this.VTHRUSTMAX;
 		this.yVel = 0;
+
     } else {
         this.onGround = false;
     }
     
-    
-
     this.setCast(this.lPos, down);
     var lIntersects = this.caster.intersectObjects(level.objs.children, false);
 
     if (lIntersects.length > 0 && lIntersects[0].distance < 0.5){    
 		this.onGround = true;
 		this.tPos.y -= this.yVel;
+        this.vThrust = this.VTHRUSTMAX;
 		this.yVel = 0;
+
     } else {
         this.onGround = false;
     }
+};
+
+Ship.prototype.onShipFall = function(){
+    level.onSegmentEnd();
+    this.yVel = 0;
+    this.xVel = 0;
 };

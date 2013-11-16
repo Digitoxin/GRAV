@@ -134,7 +134,7 @@ function init() {
 
     // grid
 
-    var size = voxSizeX*200, gridWidth = voxSizeX*8, step = voxSizeX;
+    var size = voxSizeX*400, gridWidth = voxSizeX*8, step = voxSizeX;
 
     var geometry = new THREE.Geometry();
 
@@ -154,9 +154,9 @@ function init() {
     line.type = THREE.LinePieces;
     scene.add( line );
 
-    plane = new THREE.Mesh( new THREE.PlaneGeometry( 10000, 10000 ), new THREE.MeshBasicMaterial({wireframe:true, color:0xff0000}) );
+    plane = new THREE.Mesh( new THREE.PlaneGeometry( 100000, 100000 ), new THREE.MeshBasicMaterial({color:0xff0000}) );
     plane.rotation.x = - Math.PI / 2;
-    plane.position.z = 2500;
+    plane.position.z = 10000;
     plane.visible = false;
     scene.add( plane );
 
@@ -307,7 +307,6 @@ function onDocumentMouseMove( event ) {
 
     mouse2D.x = ( event.clientX / WIDTH ) * 2 - 1;
     mouse2D.y = - ( event.clientY / HEIGHT ) * 2 + 1;
-
 }
 
 function onDocumentMouseDown( event ) {
