@@ -30,7 +30,7 @@ var Ship = function(){
 
     this.rPos = new THREE.Vector3(-2,0,0);
     this.lPos = new THREE.Vector3(2,0,0);
-    this.fPos = new THREE.Vector3(0,0,0);
+    this.fPos = new THREE.Vector3(0,0.5,-1);
     this.frontDir = new THREE.Vector3(0,0,-1);
     this.downDir = new THREE.Vector3(0,-1,0);
     this.caster = new THREE.Raycaster();
@@ -84,6 +84,7 @@ Ship.prototype.gameUpdate = function(){
 	this.tPos.y += this.yVel;
 	
     this.downCollide();
+    this.frontCollide();
     
     if (keyboard.pressed("space") && this.onGround){
         this.yVel = 0.2;
@@ -105,6 +106,7 @@ Ship.prototype.gameUpdate = function(){
     this.light.position.copy(this.mesh.position);
     this.light.position.y += 2;
 
+
     if (ship.mesh.position.y < -20){
         this.onShipFall();
     }
@@ -112,18 +114,30 @@ Ship.prototype.gameUpdate = function(){
 };
 
 Ship.prototype.frontCollide = function(){
-
+    var front = new THREE.Vector3();
+    front.z = -1;
+    
+    this.setCast(this.fPos, front);
+    var fIntersects = this.caster.intersectObjects(level.objs.children, false);
+    
+    if (fIntersects.length > 0 && fIntersects[0].distance < 4){
+        console.log("crash");
+        this.onCrash();
+    }
 };
 
 Ship.prototype.downCollide = function(){
     var down = new THREE.Vector3();
 	down.y = -1;
     down.normalize();
-    
-    this.setCast(this.rPos, down);
+
+    var pos = new THREE.Vector3();
+    pos.y = 1;
+
+    this.setCast(pos, down);
     var rIntersects = this.caster.intersectObjects(level.objs.children, false);
 
-    if (rIntersects.length > 0 && rIntersects[0].distance < this.tPos.distanceTo(this.mesh.position)){    
+    if (rIntersects.length > 0 && rIntersects[0].distance < 0.5){    
 		this.onGround = true;
 		this.tPos.y -= this.yVel;
         this.vThrust = this.VTHRUSTMAX;
@@ -147,8 +161,14 @@ Ship.prototype.downCollide = function(){
     }
 };
 
+Ship.prototype.onCrash = function(){
+    this.onShipFall();
+};
+
 Ship.prototype.onShipFall = function(){
     level.onSegmentEnd();
+
+    this.mesh.position.set(0,10,0);
     this.yVel = 0;
     this.xVel = 0;
 };

@@ -2,16 +2,9 @@
 
 // TODO:
 // Ship:
-//  - implement simple ship controls. Left, right movement and jumping
-//      - raycasting for collision
-//  - Model 3D ship, flame effects and glow.
+//  - flame effects and glow.
 //  - collisions
 //
-// Levels:
-//  - level class, loading level from JSON
-//  - JSON level editor (flat blocks, 1 ship length)
-//      - interchangable file between JSON editor and game that initializes the necessary materials, meshes and properties
-
 // IDEAS:
 // - horizontal, and vertical rotations
 // - rolling log?

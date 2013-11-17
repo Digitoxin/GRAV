@@ -59,7 +59,6 @@ Level.prototype.update = function(){
 };
 
 Level.prototype.onSegmentEnd = function(){
-    ship.mesh.position.set(0,10,0);
     this.objs.position.set(0,0,0);
     this.curSpeed = this.STARTSPEED;
 };
