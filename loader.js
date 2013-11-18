@@ -35,7 +35,7 @@ var startIfReady = function(){
 
 (function(){
     // these could be moved to a JSON file
-    var images = ["models/ship/tex.png"];
+    var images = ["models/ship/tex.png", "textures/flare.png"];
     var models = ["models/ship/ship.3geo"];
 
     for (var i = 0; i < images.length; ++i){

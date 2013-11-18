@@ -28,8 +28,8 @@ var Ship = function(){
 
     this.tPos = new THREE.Vector3();
 
-    this.rPos = new THREE.Vector3(-2,0,0);
-    this.lPos = new THREE.Vector3(2,0,0);
+    this.rPos = new THREE.Vector3(2,0,0);
+    this.lPos = new THREE.Vector3(-2,0,0);
     this.fPos = new THREE.Vector3(0,0.5,-1);
     this.frontDir = new THREE.Vector3(0,0,-1);
     this.downDir = new THREE.Vector3(0,-1,0);
@@ -47,8 +47,65 @@ var Ship = function(){
     this.maxYVel = 2;
     this.gravity = -0.008;
     this.onGround = 0;
+    
+    this.PARTICLES = 100;
+    this.particleGeo = new THREE.Geometry();
+    this.particles = [];
+    this.particleColors = [];
+    
+    for (var i = 0; i < this.PARTICLES; ++i){
+        var part = {};
+        this.particles.push(part);
+    
+        part.vert = new THREE.Vector3();
+        this.particleGeo.vertices.push( part.vert );
+        
+        part.vel = new THREE.Vector3();
+        part.vel.x = Math.random()*0.2 - 0.1 ;
+        part.vel.y = Math.random()*0.1 - 0.05;
+        part.vel.z = Math.random()*0.5+0.5;
+        
+        var col = new THREE.Color(0xffffff);
+        col.setHSL(Math.random()*0.2+0.4, 1, 0.5);
+        this.particleColors.push(col);
+        
+        part.color = col;
+    }
+    
+    this.particleGeo.colors = this.particleColors;
+    
+    this.particleMat = new THREE.ParticleBasicMaterial({
+        map: assets["textures/flare.png"].data,
+        blending: THREE.AdditiveBlending,
+        size: 3,
+        vertexColors: true,
+        transparent: true
+    });
+    
+    this.particleSystem = new THREE.ParticleSystem( this.particleGeo, this.particleMat );
+    this.particleSystem.sortParticles = true;
+    
+    
+    scene.add(this.particleSystem);
 
 };
+
+Ship.prototype.updateParticles = function(){
+
+    for (var i = 0; i < this.particles.length; ++i){
+        var p = this.particles[i];
+        p.vert.set(p.vert.x + p.vel.x, p.vert.y + p.vel.y, p.vert.z + p.vel.z);
+        
+        if (p.vert.z > 30){
+            p.vert.copy(this.mesh.position);
+            p.vert.y += Math.random() + 0.5;
+            p.vert.x += Math.random()*2 - 1;
+            p.vert.z += 2;
+        }
+    }
+    
+    this.particleGeo.verticesNeedUpdate = true;
+}
 
 Ship.prototype.update = function(){
     this.curUpdate();
@@ -66,6 +123,8 @@ Ship.prototype.intersect = function(caster){
 };
 
 Ship.prototype.gameUpdate = function(){
+    this.updateParticles();
+
     this.tPos = this.mesh.position.clone();
     // set mesh position to new position
     if (keyboard.pressed("right")){
@@ -121,7 +180,6 @@ Ship.prototype.frontCollide = function(){
     var fIntersects = this.caster.intersectObjects(level.objs.children, false);
     
     if (fIntersects.length > 0 && fIntersects[0].distance < 4){
-        console.log("crash");
         this.onCrash();
     }
 };
@@ -169,6 +227,7 @@ Ship.prototype.onShipFall = function(){
     level.onSegmentEnd();
 
     this.mesh.position.set(0,10,0);
+    this.tPos.set(0,10,0);
     this.yVel = 0;
     this.xVel = 0;
 };
