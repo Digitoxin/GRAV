@@ -5,7 +5,7 @@ var voxSizeZ = 10;
 var geoms = {
     blockGeo: new THREE.CubeGeometry( voxSizeX, voxSizeY, voxSizeZ*5 ),
     largeBlock: new THREE.CubeGeometry( voxSizeX, voxSizeY*4, voxSizeZ*5 ),
-    wallBlockGeo: new THREE.CubeGeometry( voxSizeX, voxSizeY*10, voxSizeZ ),
+    wallBlockGeo: new THREE.CubeGeometry( voxSizeX, voxSizeY*10, voxSizeZ*2 ),
 };
 
 var blockTex = THREE.ImageUtils.loadTexture("textures/square-outline-textured.png");

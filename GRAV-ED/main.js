@@ -289,9 +289,9 @@ function setVoxelPosition( intersector ) {
 
         voxelPosition.addVectors( intersector.point, tmpVec );
 
-        voxelPosition.x = Math.floor( voxelPosition.x / voxSizeX ) * voxSizeX + voxSizeX/2;
-        voxelPosition.y = Math.floor( voxelPosition.y / voxSizeY ) * voxSizeY + voxSizeY/4;
-        voxelPosition.z = Math.floor( voxelPosition.z / voxSizeZ ) * voxSizeZ + voxSizeZ/2;
+        voxelPosition.x = Math.floor( voxelPosition.x / voxSizeX ) * voxSizeX + geoms[curBlock.geo].width/2;
+        voxelPosition.y = Math.floor( voxelPosition.y / voxSizeY ) * voxSizeY + geoms[curBlock.geo].height/2;
+        voxelPosition.z = Math.floor( voxelPosition.z / voxSizeZ ) * voxSizeZ + geoms[curBlock.geo].depth/2;
     }
 }
 

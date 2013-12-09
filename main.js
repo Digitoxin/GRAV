@@ -1,13 +1,13 @@
 "use strict"
 
 // TODO:
-// Ship:
-//  - flame effects and glow.
-//  - collisions
+// - menu?
+// - Level system w/ multiple segments
+// - 
+// 
 //
 // IDEAS:
 // - horizontal, and vertical rotations
-// - rolling log?
 // - Gravity changes. Ship suddenly falls upwards or to the side
 
 var WIDTH = window.innerWidth,
@@ -77,7 +77,7 @@ function init(){
     g2.position.x = 3;
 
     level = new Level();
-    level.load("levels/lev1.json");
+    level.load("levels/level_1.json");
     scene.add(level.objs);
 
     window.addEventListener("resize", onWindowResize, false);

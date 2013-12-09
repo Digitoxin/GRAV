@@ -224,7 +224,7 @@ Ship.prototype.onCrash = function(){
 };
 
 Ship.prototype.onShipFall = function(){
-    level.onSegmentEnd();
+    level.resetLevel();
 
     this.mesh.position.set(0,10,0);
     this.tPos.set(0,10,0);

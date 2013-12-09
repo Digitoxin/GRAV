@@ -1,19 +1,48 @@
 "use strict"
 
 // TODO: figure out level format?
-// - level segments
-// - special objects
+// - switching level segments
 
 var Level = function(){
     this.objs = new THREE.Object3D();
     this.loaded = false;
     this.furthest = 0;
+	this.name = "";
+	this.curSeg = 0;
     
     this.STARTSPEED = 0.1;
     this.MAXSPEED = 2;
     this.SPEEDFAC = 0.01;
     this.curSpeed = this.STARTSPEED;
 };
+
+Level.prototype.startSegment = function(s){
+	var seg = this.segments[s];
+	
+	this.furthest = seg[0].pos.z;
+    
+    for (var i = 0; i < seg.length; ++i){
+        var type = blocktypes[seg[i].b];
+        var cube = new THREE.Mesh( geoms[type.geo], type.mat );
+        cube.position.x = seg[i].pos.x;
+        cube.position.y = seg[i].pos.y;
+        cube.position.z = seg[i].pos.z;
+
+        cube.blockName = seg[i].b;
+
+        cube.matrixAutoUpdate = false;
+        cube.updateMatrix();
+        cube.removable = true;
+
+        if (seg[i].pos.z < this.furthest){
+            this.furthest = seg[i].pos.z;
+        }
+
+        this.objs.add(cube);
+        cube.index = this.objs.children.length - 1;
+    }
+	
+}
 
 Level.prototype.load = function(lurl){
     var xmlHttp = new XMLHttpRequest();
@@ -22,29 +51,11 @@ Level.prototype.load = function(lurl){
     
     var lText = xmlHttp.responseText;
     var ldata = JSON.parse(lText);
+	
+	this.name = ldata.name;
+	this.segments = ldata.segments;
 
-    this.furthest = ldata[0].pos.z;
-    
-    for (var i = 0; i < ldata.length; ++i){
-        var type = blocktypes[ldata[i].b];
-        var cube = new THREE.Mesh( geoms[type.geo], type.mat );
-        cube.position.x = ldata[i].pos.x;
-        cube.position.y = ldata[i].pos.y;
-        cube.position.z = ldata[i].pos.z;
-
-        cube.blockName = ldata[i].b;
-
-        cube.matrixAutoUpdate = false;
-        cube.updateMatrix();
-        cube.removable = true;
-
-        if (ldata[i].pos.z < this.furthest){
-            this.furthest = ldata[i].pos.z;
-        }
-
-        this.objs.add(cube);
-        cube.index = this.objs.children.length - 1;
-    }
+	this.startSegment(this.curSeg);
     
     this.loaded = true;
 };
@@ -58,7 +69,18 @@ Level.prototype.update = function(){
     }
 };
 
-Level.prototype.onSegmentEnd = function(){
-    this.objs.position.set(0,0,0);
+Level.prototype.resetLevel = function(){
+	this.objs.position.set(0,0,0);
     this.curSpeed = this.STARTSPEED;
+}
+
+Level.prototype.onSegmentEnd = function(){
+    this.curSeg += 1;
+	if (this.curSeg > this.segments.length){
+		console.log("you win");
+	} else {
+	
+	}
+	
+	this.resetLevel();
 };
