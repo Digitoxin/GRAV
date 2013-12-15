@@ -1,15 +1,5 @@
 "use strict"
 
-// TODO:
-// - menu?
-// - Level system w/ multiple segments
-// - 
-// 
-//
-// IDEAS:
-// - horizontal, and vertical rotations
-// - Gravity changes. Ship suddenly falls upwards or to the side
-
 var WIDTH = window.innerWidth,
     HEIGHT = window.innerHeight,
     RATIO = WIDTH / HEIGHT,

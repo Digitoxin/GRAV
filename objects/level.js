@@ -1,8 +1,5 @@
 "use strict"
 
-// TODO: figure out level format?
-// - switching level segments
-
 var Level = function(){
     this.objs = new THREE.Object3D();
     this.loaded = false;
@@ -42,7 +39,7 @@ Level.prototype.startSegment = function(s){
         cube.index = this.objs.children.length - 1;
     }
 	
-}
+};
 
 Level.prototype.load = function(lurl){
     var xmlHttp = new XMLHttpRequest();
@@ -72,14 +69,19 @@ Level.prototype.update = function(){
 Level.prototype.resetLevel = function(){
 	this.objs.position.set(0,0,0);
     this.curSpeed = this.STARTSPEED;
-}
+};
 
 Level.prototype.onSegmentEnd = function(){
-    this.curSeg += 1;
-	if (this.curSeg > this.segments.length){
+	if (this.curSeg+2 > this.segments.length){
 		console.log("you win");
+        update = function(){};
 	} else {
-	
+        this.curSeg += 1;
+        
+        scene.remove(this.objs);
+        this.objs = new THREE.Object3D;
+        this.startSegment(this.curSeg);
+        scene.add(this.objs);
 	}
 	
 	this.resetLevel();

@@ -1,9 +1,5 @@
 "use strict"
 
-// TODO: Implement collisions
-//      - Front raycaster for collisions
-//      - Implement double ray caster angle between ship and plane
-
 var clamp = function(mi, n, ma){
     if (n < mi){
         return mi;
